@@ -1,0 +1,18 @@
+{
+  "mysql": {
+    "host": "127.0.0.1",
+    "port": 3306,
+    "database": "spider",
+    "user": "root",
+    "password": "12345"
+  },
+  "platform": {
+    "appKey": "6336413811",
+    "appSecret": "d8331956fd9847198df6d30367817872",
+    "base_url": "api.dianping.com",
+    "path": {
+      "merchant": "/v1/business/find_businesses"
+    }
+  }
+
+}
