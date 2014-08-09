@@ -1,0 +1,46 @@
+﻿body
+{
+    background-color:#f15a25;
+}
+.pageLayer
+{
+   padding-top:50px;
+   font-size:18px;
+    text-align:center;
+    margin:auto;
+}
+.pageAll
+{
+    width:100%;
+    margin:auto;
+           
+}
+.pageAll  .contentTitle
+{
+    font-size:24px;
+    text-align:center;
+    padding:15px 0px;
+}
+.contentImg
+{
+    width:100%;
+    height:300px;
+    border:3px solid #06c;
+}
+.btn_userAuto
+{
+    width:90%;
+    margin:15px auto;
+    border:1px solid #06c;
+    border-radius:5px;
+    padding:10px 15px;
+    color:#666;
+    background-color:#ccc;
+    text-align:center;
+}
+.btn_userAuto:hover
+{
+    border:1px solid blue;
+    cursor:pointer;
+    color:#000;
+}

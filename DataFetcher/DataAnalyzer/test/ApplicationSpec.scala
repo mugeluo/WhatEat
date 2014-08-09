@@ -17,7 +17,9 @@ class ApplicationSpec extends Specification {
 
     "Test Merchants Fetch" in new WithApplication{
       
+
       service.DataFetcher.fetchReview("10667969")
+
 
       Thread.sleep(5000)
 
