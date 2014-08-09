@@ -31,14 +31,14 @@ object DataKeeper {
       
       Logger.debug(merchantJsons.head.toString)
 
-      this.doSave(merchantJsons)
+      this.doSaveToDB(merchantJsons)
     } else {
       Logger.warn(s"fuck, error --> ${data}")
     }
   }
 
   //TODO 保存到数据库的时候，需要进行去重
-  private def doSave(merchants: Seq[JsValue]): Unit = if(merchants.nonEmpty) {
+  private def doSaveToDB(merchants: Seq[JsValue]): Unit = if(merchants.nonEmpty) {
     val sql = "insert into Merchant values " +
       merchants.map { m =>
         s"""(

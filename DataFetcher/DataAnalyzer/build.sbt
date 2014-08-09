@@ -12,5 +12,6 @@ libraryDependencies ++= Seq(
   cache,
   ws,
   "mysql" % "mysql-connector-java" % "5.1.27",
-  "commons-codec" % "commons-codec" % "1.8"
+  "commons-codec" % "commons-codec" % "1.8",
+  "org.elasticsearch" % "elasticsearch" % "1.2.0"
 )

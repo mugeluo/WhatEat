@@ -17,7 +17,8 @@ class ApplicationSpec extends Specification {
 
     "Test Merchants Fetch" in new WithApplication{
       
-      service.DataFetcher.fetchMerchants()
+      //service.DataFetcher.fetchMerchants()
+      service.ESDataUploader.uploadMerchatsFromDB
 
       Thread.sleep(5000)
 
