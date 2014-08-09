@@ -10,8 +10,10 @@ var config = require("./conf/config.json").platform;
 var events = require('events');
 var util   = require('util');
 var sha1   = require("sha1");
+var BufferHelper = require('bufferhelper');
 
 var DataFetcher = function() {
+  this.bufferHelper = new BufferHelper();
   events.EventEmitter.call(this);
 };
 
@@ -28,23 +30,59 @@ DataFetcher.prototype.fetchMerchants = function() {
     method:   "get"
   };
 
-  var request = http.request(opts, function(res){
-    console.log(res);
-    
-    //TODO
+  console.log(opts);
 
-    _this.emit("merchants", res);
+  var request = http.request(opts, function(res){
+    console.log("connected -- status: " + res.statusCode);
+    _this.emit("connected");
   });
 
   request.on("error", function(err){
     console.error(err);
   });
+
+  request.on("data", function(data){
+    console.log(data);
+    _this.bufferHelper.concat(data);
+  });
+
+  request.on("end", function(){
+    var buffer = _this.bufferHelper.toBuffer();
+    var data = buffer.toString();
+
+    console.log(data);
+
+    _this.bufferHelper.empty();
+    _this.emit('merchants', data);
+
+  });
+
+  request.setTimeout(30000, function() {
+    console.error("what the fuck, timeout");
+  });
+
+  request.end();
 };
 
 DataFetcher.prototype.sign = function(paras) {
   if(paras) {
-    //TODO 
+    var keys = [];
+    for(var key in paras) {
+      keys.push(key);
+    }
+    keys.sort();
 
+    var queryStr = config.appKey;
+    for(var i = 0, len = keys.length; i < len; i++){
+      var key = keys[i];
+      queryStr += (key + paras[key]);
+    }
+
+    queryStr += config.appSecret;
+
+    console.log(queryStr);
+
+    return sha1(queryStr).toUpperCase();
   } else {
     console.error("invalid paras");
     return null;
@@ -54,34 +92,27 @@ DataFetcher.prototype.sign = function(paras) {
 //组装请求参数
 DataFetcher.prototype.getParas = function () {
   return {
-    city: "上海",
-    category: "美食",
-    keyword: "美食",
+    //city: "上海",
+//    category: "美食",
+  //  keyword: "美食",
+    latitude: 31.21524,
+    longitude: 121.420033,
     limit: 1
   };
 };
-
 
 DataFetcher.prototype.getQueryString = function() {
   var paras = this.getParas();
   var sign = this.sign(paras)
 
-  var keys = [];
+  var queryStr = "?appkey=" + config.appKey + "&";
   for(var key in paras) {
-    keys.push(key);
+    queryStr += (key + "=" + paras[key] + "&");
   }
+  queryStr += ("sign=" + sign);
 
-  keys.sort();
-
-  var queryStr = config.appKey;
-  for(var key in keys){
-    queryStr += (key + paras[key]);
-  }
-
-  queryStr += config.appSecret;
-
-  return sha1(queryStr).toUpperCase();
-}
+  return queryStr;
+};
 
 module.exports = DataFetcher;
 
