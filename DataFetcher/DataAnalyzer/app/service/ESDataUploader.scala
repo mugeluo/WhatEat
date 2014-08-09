@@ -43,9 +43,48 @@ object ESDataUploader {
         "reviewCount" -> r[Int]("reviewCount"),
         "distance"    -> r[Int]("distance")
       )}.toList.map { merch =>
-        println("#################")
-        println(merch.toString)
+        
+        //TODO
       }
     }
   }
+
+  private def getReviewsByMerchatIds(ids: List[Long]): Map[Long, Review] = {
+    if(ids.nonEmpty) {
+      import anorm.SeqParameter
+      DB.withConnection { implicit conn =>
+        SQL("""
+          select 
+            reviewId, busiId, textExcerpt, 
+            reviewRating, productRating, decorationRating, serviceRating
+          from Review where ids in ({businessIds})
+        """).on("businessIds" -> SeqParameter(ids))().map { row =>
+          val businessId = row[Long]("busiId")
+          val crrReview = Review(
+            businessId, 
+            row[Long]("reviewId"), 
+            row[String]("textExcerpt"),
+            row[Int]("reviewRating"),
+            row[Int]("productRating"),
+            row[Int]("decorationRating"),
+            row[Int]("serviceRating")
+          )
+
+          businessId -> crrReview
+        }.toMap
+      }
+    } else {
+      Map()
+    }
+  }
 }
+
+sealed case class Review(
+  businessId: Long, 
+  reviewId: Long, 
+  textExcerpt: String,
+  reviewRating: Int,
+  productRating: Int, 
+  decorationRating: Int,
+  serviceRating: Int
+)
