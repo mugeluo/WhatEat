@@ -37,7 +37,7 @@ object DataKeeper {
     }
   }
 
-  def saveReview(data:JsValue):Unit = {
+  def saveReview(data:JsValue,busiId:String):Unit = {
      val status = (data \ "status").as[String]
      if(status == "OK"){
         val totalCount = (data \ "count").as[Int]
@@ -47,23 +47,24 @@ object DataKeeper {
         total_count: ${totalCount}"""
       )
       val reviewJsons = (data \ "reviews").as[JsArray].value
-      this.doSaveReview(reviewJsons)
+      this.doSaveReview(reviewJsons,busiId)
      }else{
         Logger.warn(s"shit, error --> ${data}")
      }
 
   }
 
-  private def doSaveReview(reviews:Seq[JsValue]):Unit = if(reviews.nonEmpty){
+  private def doSaveReview(reviews:Seq[JsValue],busiId:String):Unit = if(reviews.nonEmpty){
     println(reviews)
     val sql = "insert into Review values "+
         reviews.map{ m=>
           s"""(
           '${(m \ "review_id").as[Int]}',
+          '${busiId.toLong}',
           '${(m \ "user_nickname").as[String]}',
           '${(m \ "created_time").as[String]}',
           '${(m \ "text_excerpt").as[String]}',
-          '${(m \ "review_rating").as[Float]}',
+          '${(m \ "review_rating").as[Int]}',
           '${(m \ "rating_img_url").as[String]}',
           '${(m \ "rating_s_img_url").as[String]}',
           '${(m \ "product_rating").as[Int]}',

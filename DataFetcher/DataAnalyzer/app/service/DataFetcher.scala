@@ -52,7 +52,7 @@ object DataFetcher {
     ).get()
 
     fu.onComplete {
-      case Success(resp) => DataKeeper.saveReview(resp.json)
+      case Success(resp) => DataKeeper.saveReview(resp.json,busiId)
       case Failure(ex) => Logger.error("", ex)
     }
 
