@@ -1,11 +1,4 @@
-﻿/*@font-face
-{
-    font-family: 'Helvetica Neue';
-    src: url('font/HelveticaNeue.eot');
-    src: url('font/HelveticaNeue.eot?#iefix') format('embedded-opentype'), url('font/HelveticaNeue.woff') format('woff'), url('font/HelveticaNeue.ttf') format('truetype'), url('font/HelveticaNeue.svg#webfont34M5alKg') format('svg');
-    font-weight: normal;
-    font-style: normal;
-}*/
+﻿
 body,input,img,ol,ul,textarea,button {font-size:12px;font-family:Helvetica Neue,Tahoma,Arial,"微软雅黑","宋体","黑体";color:#333;}
 body {margin:0px;padding:0px;background-attachment:fixed;-webkit-text-size-adjust:none;}
 img{border:0px;}
