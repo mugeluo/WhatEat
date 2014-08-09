@@ -1,6 +1,13 @@
 ﻿body
 {
-    background-color:#ffd800;
+    background-color:#f15a25;
+}
+.pageLayer
+{
+   padding-top:50px;
+   font-size:18px;
+    text-align:center;
+    margin:auto;
 }
 .pageAll
 {
@@ -22,7 +29,8 @@
 }
 .btn_userAuto
 {
-    margin-top:15px;
+    width:90%;
+    margin:15px auto;
     border:1px solid #06c;
     border-radius:5px;
     padding:10px 15px;
