@@ -16,10 +16,10 @@ import org.elasticsearch.common.settings.ImmutableSettings
  * Tiner 2014-2-8
  */
 object ESClientHelper {
-  private val ES_HOST = "127.0.0.1"
-  private val ES_PORT = 9300
-  private val INDEX = "KCF_TINKER"
-  private val CLUSTER_NAME = "KCF_TINKER"
+  val ES_HOST = "127.0.0.1"
+  val ES_PORT = 9300
+  val INDEX = "eat"
+  val CLUSTER_NAME = "KCF_TINKER"
 
   val settings = ImmutableSettings.settingsBuilder().
     put("cluster.name", CLUSTER_NAME).

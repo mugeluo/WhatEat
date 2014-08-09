@@ -21,8 +21,8 @@ object ESDataUploader {
   def uploadMerchatsFromDB: Unit = {
     DB.withConnection { implicit conn =>
       val sql = "select * from Merchant"
-      SQL(sql)().map { r => Json.obj(
-        "businessId" -> r[String]("businessId"),
+      val merchants = SQL(sql)().map { r => Json.obj(
+        "businessId" -> r[Long]("businessId"),
         "name"       -> r[String]("name"),
         "branchName" -> r[Option[String]]("branchName"),
         "address"    -> r[String]("address"),
@@ -42,14 +42,38 @@ object ESDataUploader {
         "businessUrl" -> r[Option[String]]("businessUrl"),
         "reviewCount" -> r[Int]("reviewCount"),
         "distance"    -> r[Int]("distance")
-      )}.toList.map { merch =>
-        
-        //TODO
+      )}.toList
+
+      if(merchants.nonEmpty) {
+        val ids = merchants.map(x => (x \ "businessId").as[Long])
+        val reviewsMap = this.getReviewsByMerchatIds(ids)
+
+        merchants.map { merch =>
+          val merchantId = (merch \ "businessId").as[Long]
+          val reviews = reviewsMap.get(merchantId).getOrElse(List())
+          val toUploadJson = merch ++ Json.obj(
+            "reviews" -> reviews.map(_.textExcerpt).mkString("\t\n"),
+            "avgReviewRating"     -> this.avgReviewRating(reviews),
+            "avgProductRating"    -> this.avgProductRating(reviews),
+            "avgDecorationRating" -> this.avgDecorationRating(reviews),
+            "avgServiceRating"    -> this.avgServiceRating(reviews)
+          )
+
+          Logger.info(s"\n###########################\n${toUploadJson}\n####################")
+
+          ESClientHelper.fire { client =>
+            ESClientHelper.doSend(
+              toUploadJson.toString, merchantId.toString, "merchant"
+            )(client)
+          }
+        }
+      } else {
+        Logger.info("nothing to upload")
       }
     }
   }
 
-  private def getReviewsByMerchatIds(ids: List[Long]): Map[Long, Review] = {
+  private def getReviewsByMerchatIds(ids: List[Long]): Map[Long, List[Review]] = {
     if(ids.nonEmpty) {
       import anorm.SeqParameter
       DB.withConnection { implicit conn =>
@@ -57,11 +81,10 @@ object ESDataUploader {
           select 
             reviewId, busiId, textExcerpt, 
             reviewRating, productRating, decorationRating, serviceRating
-          from Review where ids in ({businessIds})
+          from Review where busiId in ({businessIds})
         """).on("businessIds" -> SeqParameter(ids))().map { row =>
-          val businessId = row[Long]("busiId")
-          val crrReview = Review(
-            businessId, 
+          Review(
+            row[Long]("busiId"), 
             row[Long]("reviewId"), 
             row[String]("textExcerpt"),
             row[Int]("reviewRating"),
@@ -69,14 +92,54 @@ object ESDataUploader {
             row[Int]("decorationRating"),
             row[Int]("serviceRating")
           )
-
-          businessId -> crrReview
-        }.toMap
+        }.toList.groupBy(_.businessId)
       }
     } else {
       Map()
     }
   }
+
+  private def aggregateContent(reviews: List[Review]): String = {
+    if(reviews.nonEmpty) {
+      reviews.map( _.textExcerpt ).mkString("\t\n")
+    } else {
+      ""
+    }
+  }
+
+  private def avgReviewRating(reviews: List[Review]): Int = {
+    if(reviews.nonEmpty) {
+      (reviews.map(_.reviewRating).sum / reviews.size).toInt
+    } else {
+      0
+    }
+  }
+
+  private def avgProductRating(reviews: List[Review]): Int = {
+    if(reviews.nonEmpty) {
+      (reviews.map(_.productRating).sum / reviews.size).toInt
+    } else {
+      0
+    }
+  }
+
+  private def avgDecorationRating(reviews: List[Review]): Int = {
+    if(reviews.nonEmpty) {
+      (reviews.map(_.decorationRating).sum / reviews.size).toInt
+    } else {
+      0
+    }
+  }
+
+  private def avgServiceRating(reviews: List[Review]): Int = {
+    if(reviews.nonEmpty) {
+      (reviews.map(_.serviceRating).sum / reviews.size).toInt
+    } else {
+      0
+    }
+  }
+
+
 }
 
 sealed case class Review(

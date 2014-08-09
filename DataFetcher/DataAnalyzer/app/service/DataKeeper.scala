@@ -18,36 +18,20 @@ object DataKeeper {
   def saveMerchatns(data: JsValue): Unit = {
     val status = (data \ "status").as[String]
     if(status == "OK") {
-      val totalCount = (data \ "total_count").as[Int]
-      val crrCount = (data \ "count").as[Int]
-
-      Logger.info(s"""
-        status: ${status}, 
-        total_count: ${totalCount}, 
-        current_count: ${crrCount}"""
-      )
-
       val merchantJsons = (data \ "businesses").as[JsArray].value
-      
-      Logger.debug(merchantJsons.head.toString)
-
       this.doSaveToDB(merchantJsons)
+
     } else {
       Logger.warn(s"fuck, error --> ${data}")
     }
   }
 
-  def saveReview(data:JsValue,busiId:String):Unit = {
+  def saveReview(data: JsValue, busiId: String): Unit = {
      val status = (data \ "status").as[String]
      if(status == "OK"){
-        val totalCount = (data \ "count").as[Int]
-
-        Logger.info(s"""
-        status: ${status}, 
-        total_count: ${totalCount}"""
-      )
-      val reviewJsons = (data \ "reviews").as[JsArray].value
-      this.doSaveReview(reviewJsons,busiId)
+       val reviewJsons = (data \ "reviews").as[JsArray].value
+       this.doSaveReview(reviewJsons,busiId)
+       
      }else{
         Logger.warn(s"shit, error --> ${data}")
      }
@@ -55,7 +39,6 @@ object DataKeeper {
   }
 
   private def doSaveReview(reviews:Seq[JsValue],busiId:String):Unit = if(reviews.nonEmpty){
-    println(reviews)
     val sql = "insert into Review values "+
         reviews.map{ m=>
           s"""(
@@ -75,18 +58,11 @@ object DataKeeper {
           )"""
         }.mkString(",")
 
-        println(sql)
-
-      Logger.info(sql) 
-
         DB.withConnection { implicit conn =>
-        val num = SQL(sql).executeUpdate()
-
-        Logger.info(s"${num} merchants saved to DB")
+          val num = SQL(sql).executeUpdate()
+          Logger.info(s"${num} merchants saved to DB")
+        }
   }
-  }
-
-
 
 
   //TODO 保存到数据库的时候，需要进行去重

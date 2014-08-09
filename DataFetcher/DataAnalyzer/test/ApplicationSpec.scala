@@ -17,9 +17,8 @@ class ApplicationSpec extends Specification {
 
     "Test Merchants Fetch" in new WithApplication{
       
-
-      service.DataFetcher.fetchReview("10667969")
-
+      //service.DataFetcher.fetchAndSaveMerchantsAndReviews
+      service.ESDataUploader.uploadMerchatsFromDB
 
       Thread.sleep(5000)
 

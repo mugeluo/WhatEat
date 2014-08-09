@@ -25,7 +25,11 @@ curl -XPUT    'http://127.0.0.1:9200/eat/merchant/_mapping' -d '{
       "businessUrl": {"type": "string"},
       "reviewCount": {"type": "integer"},
       "distance": {"type": "integer"},
-      "reviews": {"type": "string", "indexAnalyzer": "ansj_index_analyzer", "searchAnalyzer": "ansj_index_analyzer"}
+      "reviews": {"type": "string", "indexAnalyzer": "ansj_index_analyzer", "searchAnalyzer": "ansj_index_analyzer"},
+      "avgReviewRating": {"type": "integer"},
+      "avgProductRating": {"type": "integer"},
+      "avgDecorationRating": {"type": "integer"},
+      "avgServiceRating": {"type": "integer"}
     }
   }
 }'
