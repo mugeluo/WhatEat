@@ -68,6 +68,43 @@ public class Common
         return null;
     }
 
+    ///// <summary>
+    /// 请求服务器 用get提交
+    /// </summary>
+    public static string RequestServerByGet ( string url, Dictionary<string, string> paraDic )
+    {
+        try
+        {
+            string paraStr = string.Empty;
+            if (paraDic != null && paraDic.Count > 0)
+            {
+                foreach (string key in paraDic.Keys)
+                {
+                    if (string.IsNullOrEmpty ( paraStr ))
+                        paraStr = key + "=" + paraDic[key];
+                    else
+                        paraStr += "&" + key + "=" + paraDic[key];
+                }
+            }
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create ( url + "?" + paraStr );
+            request.Method = "get";
+            request.Timeout = 2000;
+
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse ( );
+            System.IO.Stream dataStream = response.GetResponseStream ( );
+            System.IO.StreamReader reader = new System.IO.StreamReader ( dataStream, Encoding.UTF8 );
+            string responseFromServer = reader.ReadToEnd ( );
+            reader.Close ( );
+            dataStream.Close ( );
+            response.Close ( );
+
+            return responseFromServer;
+        }
+        catch { }
+
+        return null;
+    }
     /// <summary>
     /// 获取用户当前区域温度
     /// </summary>
@@ -207,6 +244,19 @@ public class Common
             keyword.Append ( id );
         }
         return keyword;
+    }
+
+    public static string GetPointer ( )
+    {
+        List<string> pointer = new List<string> ( );
+        string baiduUrl = "http://api.map.baidu.com/location/ip";
+
+        Dictionary<string, string> paras = new Dictionary<string, string> ( );
+        paras.Add ( "ak", "9RKI1PXKnCGGGeZwo32wl4Ws" );
+        paras.Add ( "coor", "bd09ll" );
+
+        string resultStr = RequestServerByGet ( baiduUrl, paras );
+        return resultStr;
     }
 
 }
