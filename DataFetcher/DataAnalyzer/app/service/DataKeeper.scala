@@ -37,6 +37,57 @@ object DataKeeper {
     }
   }
 
+  def saveReview(data:JsValue):Unit = {
+     val status = (data \ "status").as[String]
+     if(status == "OK"){
+        val totalCount = (data \ "count").as[Int]
+
+        Logger.info(s"""
+        status: ${status}, 
+        total_count: ${totalCount}"""
+      )
+      val reviewJsons = (data \ "reviews").as[JsArray].value
+      this.doSaveReview(reviewJsons)
+     }else{
+        Logger.warn(s"shit, error --> ${data}")
+     }
+
+  }
+
+  private def doSaveReview(reviews:Seq[JsValue]):Unit = if(reviews.nonEmpty){
+    println(reviews)
+    val sql = "insert into Review values "+
+        reviews.map{ m=>
+          s"""(
+          '${(m \ "review_id").as[Int]}',
+          '${(m \ "user_nickname").as[String]}',
+          '${(m \ "created_time").as[String]}',
+          '${(m \ "text_excerpt").as[String]}',
+          '${(m \ "review_rating").as[Float]}',
+          '${(m \ "rating_img_url").as[String]}',
+          '${(m \ "rating_s_img_url").as[String]}',
+          '${(m \ "product_rating").as[Int]}',
+          '${(m \ "decoration_rating").as[Int]}',
+          '${(m \ "service_rating").as[Int]}',
+          '${(m \ "service_rating").as[Int]}',
+          '${(m \ "review_url").as[String]}'
+          )"""
+        }.mkString(",")
+
+        println(sql)
+
+      Logger.info(sql) 
+
+        DB.withConnection { implicit conn =>
+        val num = SQL(sql).executeUpdate()
+
+        Logger.info(s"${num} merchants saved to DB")
+  }
+  }
+
+
+
+
   //TODO 保存到数据库的时候，需要进行去重
   private def doSave(merchants: Seq[JsValue]): Unit = if(merchants.nonEmpty) {
     val sql = "insert into Merchant values " +
