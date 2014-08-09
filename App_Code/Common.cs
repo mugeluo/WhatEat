@@ -72,7 +72,7 @@ public class Common
     /// 获取用户当前区域温度
     /// </summary>
     /// <returns></returns>
-    public static string GetTemperature()
+    public static int GetTemperature()
     {
         Dictionary<string, string> paras = new Dictionary<string, string>();
         paras.Add("location", "上海");
@@ -84,11 +84,21 @@ public class Common
         JavaScriptArray temperatureArr = (JavaScriptArray)resultObj["results"];
         resultObj = ((JavaScriptObject)temperatureArr[0]);
 
-        string temperature = resultObj["temperature"].ToString().Replace("℃", "");
-        return temperature;
-        //return int.Parse(temperature);
+        //string str = resultObj["temperature"].ToString ( );
+        //string[] temp = str.Split ( new string[] { "\\u" }, StringSplitOptions.RemoveEmptyEntries );
+        //for (int i = 0; i < temp.Length; i++)
+        //    temp[i] = ((char)Convert.ToInt32 ( temp[i], 16 )).ToString ( );
+        //str = string.Join ( "", temp );
+
+        string temperature = resultObj["temperature"].ToString ( ).Replace ( "2103", "" );
+        return int.Parse ( temperature );
     }
 
+    /// <summary>
+    /// 根据温度获取相关商铺关键字
+    /// </summary>
+    /// <param name="temperature">当前天气温度</param>
+    /// <returns></returns>
     public static StringBuilder GetKeywordsByTemperature(int temperature)
     {
         StringBuilder keywords=new StringBuilder();
@@ -120,29 +130,73 @@ public class Common
         return keywords;
     }
 
+    /// <summary>
+    /// 根据当前小时数获取相关商铺关键字
+    /// </summary>
+    /// <returns></returns>
     public static StringBuilder GetKeywordsByDateHour() 
     {
-        StringBuilder kerwords = new StringBuilder();
+        StringBuilder keyword = new StringBuilder ( );
         DateTime datetime = DateTime.Now;
         int hour = datetime.Hour;
+        if (hour >= 22 && hour <= 4)
+            keyword.Append ( "  夜宵" );
+        else if (hour >= 5 && hour <= 10)
+            keyword.Append ( "  早餐" );
+        else if (hour >= 11 && hour <= 12)
+            keyword.Append ( "  夜宵" );
+        else if (hour >= 13 && hour <= 16)
+            keyword.Append ( "  下午茶" );
+        else
+            keyword.Append ( "  晚餐" );
 
-        return kerwords;
+        return keyword;
 
     }
 
+    /// <summary>
+    /// 根据当前月份获取相关商铺关键字
+    /// </summary>
+    /// <returns></returns>
     public static StringBuilder GetKeywordsByDateMonth()
     {
-        StringBuilder kerwords = new StringBuilder();
+        StringBuilder keyword = new StringBuilder ( );
         DateTime datetime = DateTime.Now;
         int month = datetime.Month;
 
-        return kerwords;
+        switch (month)
+        {
+            case 12:
+            case 1:
+            case 2:
+                keyword.Append ( "春" ); break;
+            case 3:
+            case 4:
+            case 5:
+                keyword.Append ( "夏" ); break;
+            case 6:
+            case 7:
+            case 8:
+                keyword.Append ( "秋" ); break;
+            case 9:
+            case 10:
+            case 11:
+                keyword.Append ( "冬" ); break;
+            default:
+                break;
+        }
+
+        return keyword;
 
     }
 
+    /// <summary>
+    /// 获取用户相关操作记录
+    /// </summary>
+    /// <returns></returns>
     public static StringBuilder GetKeywordsByUserLog()
     {
-        StringBuilder kerwords = new StringBuilder ( );
+        StringBuilder keyword = new StringBuilder ( );
         XmlDocument doc = new XmlDocument ( );
         doc.Load ( HttpContext.Current.Server.MapPath ( "~/App_Data/userLog.xml" ) );
 
@@ -150,9 +204,9 @@ public class Common
         foreach (XmlNode log in logList)
         {
             string id = log.Attributes["id"].Value;
-            kerwords.Append ( id );
+            keyword.Append ( id );
         }
-        return kerwords;
+        return keyword;
     }
 
 }
