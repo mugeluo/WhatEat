@@ -1,6 +1,6 @@
-﻿body
+﻿#page
 {
-    background-color:#f15a25;
+    background:url('../images/bg_page.jpg') repeat-x;
 }
 .pageLayer
 {
@@ -8,6 +8,7 @@
    font-size:18px;
     text-align:center;
     margin:auto;
+    
 }
 .pageAll
 {
@@ -23,24 +24,59 @@
 }
 .contentImg
 {
-    width:100%;
-    height:300px;
-    border:3px solid #06c;
-}
-.btn_userAuto
-{
-    width:90%;
-    margin:15px auto;
-    border:1px solid #06c;
-    border-radius:5px;
-    padding:10px 15px;
-    color:#666;
-    background-color:#ccc;
+    width:80%;
+    margin:auto;
     text-align:center;
 }
-.btn_userAuto:hover
+
+.btn_userAuto
 {
-    border:1px solid blue;
+    width:100%;
+    margin:15px auto;
+    text-align:center;
+}
+
+.returnPage 
+{
+    padding:15px;
+}
+.returnPage a
+{
     cursor:pointer;
+    font-size:13px;
+    font-weight:bold;
+    text-decoration: none;
     color:#000;
+}
+.returnPage a span
+{
+    padding-right:3px;
+    font-weight:bold;
+    color:red; 
+    font-size:13px;
+}
+.dialogContent
+{
+    width:80%;
+    line-height:25px;
+    margin:auto;
+    font-weight:bold;
+    color:#000;
+}
+.dialogBtnSize
+{
+    width:220px;
+    height:46px;
+    cursor:pointer;
+}
+.pageBtnSize
+{
+    width:290px;
+    height:53px;
+    cursor:pointer;
+}
+.useCount span
+{
+    color:#666;
+    font-size:14px;
 }
