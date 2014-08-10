@@ -44,7 +44,8 @@ object DataQuerier {
           (_source.avgReviewRating > 0? log10(_source.avgReviewRating) : 0) + 
           (_source.avgProductRating > 0? log10(_source.avgProductRating) : 0) + 
           (_source.avgDecorationRating > 0? log10(_source.avgDecorationRating) : 0) + 
-          (_source.avgServiceRating > 0? log10(_source.avgServiceRating) : 0)
+          (_source.avgServiceRating > 0? log10(_source.avgServiceRating) : 0) + 
+          (_source.reviewCount > 0? sqrt(log10(_source.reviewCount)) : 0)
         )
       """, 
       "number"
@@ -73,5 +74,5 @@ object DataQuerier {
       "regions^1.1", "city^1.1", "reviews^11" 
     )
   }
-
+  
 }
