@@ -9,14 +9,12 @@
 
     <link href="css/basic.css" rel="stylesheet" />
     <link href="css/index.css" rel="stylesheet" />
-
-    <link href="jqueryPlugin/jquery.mobile/css/jquery.mobile-1.3.1.min.css" rel="stylesheet"
-        type="text/css" />
+    <link href="jqueryPlugin/jquery.mobile/css/jquery.mobile-1.3.1.min.css" rel="stylesheet"  type="text/css" />
 
     <script src="jqueryLB/jquery.tools.1.27.min.js" type="text/javascript"></script>
     <script src="jqueryPlugin/layer/layer.min.js" type="text/javascript"></script>
-
     <script src="jqueryPlugin/jquery.mobile/jquery.mobile-1.3.1.min.js" type="text/javascript"></script>
+ 
     <script src="js/index.js" type="text/javascript"></script>
 </head>
 <body>
@@ -36,32 +34,41 @@
     </div>
  </div>
     
-    <div id="userAuto" data-role="page">
-        <div class="returnPage Left"><a data-rel="back" data-role="none"><span><</span>返回</a></div>
+<div id="userAuto" data-role="page">
+    <div class="returnPage Left"><a data-rel="back" data-role="none"><span><</span>返回</a></div>
 
-        <div class=" Right mRight15 pTop10">
-            <div class="Left"><img style="width:25px;height:31px;" src="images/ico_useCount.png" /></div>
-            <div class="Left LineHeight30 mLeft5 useCount"><span id="userChangeCount">0</span><span>/</span><span>3</span></div>
-            <div class="Clear"></div>
-        </div>
-        <div class=" Clear"></div>
+    <div class=" Right mRight15 pTop10">
+        <div class="Left"><img style="width:25px;height:31px;" src="images/ico_useCount.png" /></div>
+        <div class="Left LineHeight30 mLeft5 useCount"><span id="userChangeCount">0</span><span>/</span><span>3</span></div>
+        <div class="Clear"></div>
+    </div>
+    <div class=" Clear"></div>
 
-        <div class=" TxtCenter">
-            <img style="height:175px;" src="images/ico_zhuge.png" />
-        </div>
-
-        <div class="dialogContent mTop15">每日三计锦囊。根据你每次选择，军师会逐步掌握你的喜好，为你出谋划策，彻底解决吃饭难题。</div>
-
-        <div class="btn_userAuto mTop20"><img  class="pageBtnSize" id="btn_userAuto" src="images/btn_askZhuGe.png" /></div>
+    <div class=" TxtCenter">
+        <img style="height:175px;" src="images/ico_zhuge.png" />
     </div>
 
-    <div id="userListenGog" data-role="page">
-        <div class="returnPage"><a data-rel="back" data-role="none"><span><</span>返回</a></div>
-        <div class=" TxtCenter">
-            <img style=" width:130px;height:184px;" src="images/ico_miaoji.png" />
-        </div>
-        <div class="dialogContent">缘分天注定，连吃饭也逃不过，看看今天和哪儿有缘吧！</div>
-        <div class="btn_userAuto mTop25"><img class="pageBtnSize" id="btn_userListenGog" src="images/btn_godKnow.png" /></div>
+    <div class="dialogContent mTop15">每日三计锦囊。根据你每次选择，军师会逐步掌握你的喜好，为你出谋划策，彻底解决吃饭难题。</div>
+
+    <div class="btn_userAuto mTop70"><img  class="pageBtnSize" id="btn_userAuto" src="images/btn_askZhuGe.png" /></div>
+</div>
+
+<div id="userListenGog" data-role="page">
+    <div class="returnPage"><a data-rel="back" data-role="none"><span><</span>返回</a></div>
+    <div class=" TxtCenter">
+        <img style=" width:130px;height:184px;" src="images/ico_miaoji.png" />
     </div>
+    <div class="dialogContent mTop15">缘分天注定，连吃饭也逃不过，看看今天和哪儿有缘吧！</div>
+    <div class="btn_userAuto mTop70"><img class="pageBtnSize" id="btn_userListenGog" src="images/btn_godKnow.png" /></div>
+</div>
+
+<div id="map" data-role="page">
+    <div class="returnPage Left"><a data-rel="back" data-role="none"><span><</span>返回</a></div>
+    <div id="allmap" class="TxtCenter"><img src="images/ico_demoMap.png" /></div>
+</div>
+<input type="hidden" id="txt_shopName"/>
+<input type="hidden" id="txt_shopLogo"/>
+<input type="hidden" id="txt_shopAddress"/>
 </body>
 </html>
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=9RKI1PXKnCGGGeZwo32wl4Ws"></script>-->

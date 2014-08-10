@@ -87,7 +87,10 @@ public class Common
                 }
             }
 
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create ( url + "?" + paraStr );
+            if (!string.IsNullOrEmpty ( paraStr ))
+                url = url + "?" + paraStr;
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create ( url );
             request.Method = "get";
             request.Timeout = 2000;
 
@@ -105,6 +108,7 @@ public class Common
 
         return null;
     }
+
     /// <summary>
     /// 获取用户当前区域温度
     /// </summary>
@@ -259,4 +263,14 @@ public class Common
         return resultStr;
     }
 
+    public static string GetShopInfo ( string shopIndex )
+    {
+        List<string> pointer = new List<string> ( );
+        string baiduUrl = "http://192.168.2.123:9000/query/" + shopIndex + "/火锅";
+
+        Dictionary<string, string> paras = new Dictionary<string, string> ( );
+
+        string resultStr = RequestServerByGet ( baiduUrl, paras );
+        return resultStr;
+    }
 }
