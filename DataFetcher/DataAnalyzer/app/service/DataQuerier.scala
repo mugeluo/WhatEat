@@ -26,7 +26,7 @@ object DataQuerier {
    * @words: 查询词条， 每个关键词条用#号隔开
    *    如： 上海#五角场#辣#美食
    */
-  def query(words: String): JsValue = search(words){ builder =>
+  def query(words: String, idx: Int): JsValue = search(words){ builder =>
     builder.setTypes("merchant")
     builder.setQuery(this.customeQueryBuilder(words))
     builder.addSort(SortBuilders.scriptSort(
@@ -44,19 +44,20 @@ object DataQuerier {
           (_source.avgReviewRating > 0? log10(_source.avgReviewRating) : 0) + 
           (_source.avgProductRating > 0? log10(_source.avgProductRating) : 0) + 
           (_source.avgDecorationRating > 0? log10(_source.avgDecorationRating) : 0) + 
-          (_source.avgServiceRating > 0? log10(_source.avgServiceRating) : 0)
+          (_source.avgServiceRating > 0? log10(_source.avgServiceRating) : 0) + 
+          (_source.reviewCount > 0? sqrt(log10(_source.reviewCount)) : 0)
         )
       """, 
       "number"
     ))
   
-    builder.setSize(1) //只返回一个
+    builder.setSize(30) //只返回一个
     val response = builder.execute().actionGet()
     
-    response.getHits().hits().headOption.map { hit =>
+    response.getHits().hits().lift(idx - 1).map { hit =>
       Json.parse(hit.getSourceAsString)
     }.getOrElse{
-      Json.obj("error" -> "没有匹配到商户", "status" -> "fail")
+      MerchantService.getRandomMerchant
     }
   }
 

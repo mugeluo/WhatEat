@@ -11,9 +11,11 @@ object Application extends Controller {
     Ok(views.html.index("Your new application is ready."))
   }
 
-  def query(terms: String) = Action { implicit req =>
+  def query(idx: Int, terms: String) = Action { implicit req =>
 
-    Ok(DataQuerier.query(terms))
+    Ok(DataQuerier.query(terms, idx))
   }
+
+
 
 }
