@@ -1,4 +1,5 @@
 ﻿var Index = new Object();
+
 //所需参数
 Index.Option ={
     layerIndex:0,
@@ -58,6 +59,7 @@ Index.CreateHtmlWithDialog2 = function () {
     var html = '<div style="width:' + Index.Option.screenWidth + 'px; height:380px; padding:20px;border:2px solid #c07452; background-color:#eee;border-radius:4px;">';
     html += '<div class="divHidden"><img src="' + $("#txt_shopLogo").val() + '" /></div>';
     html += '<div style="backgroup-color:#fff;padding:5px 10px;">';
+    html += '<div class="dialogFont" style="font-size:16px;padding-left:10px;">王母娘娘告诉你去吃</div>';
     html += '<div class="pAll10 dialogFont">' + $("#txt_shopName").val() + '</div>';
     html += '<div class="mTop10 TxtCenter"><img onclick="Index.GoToIt();" class="dialogBtnSize" src="images/ico_gotoit.png"/></div>';
     html += '</div>';
